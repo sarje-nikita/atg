@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'Role_based_login_system.wsgi.application'
 
 
 DATABASES = {
-    'default': dj_database_url.parse('os.environ.get("DATABASE_URL")')
+    'default': dj_database_url.parse("postgres://testdb_tnct_user:C9sCfocWcRsM4NOaBx4BqiwIpHvdRcze@dpg-cn789i6n7f5s73dahv70-a.oregon-postgres.render.com/testdb_tnct")
 }
 
 
