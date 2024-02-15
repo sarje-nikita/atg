@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
-
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -73,12 +73,18 @@ WSGI_APPLICATION = 'Role_based_login_system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.parse('postgres://testdb_tnct_user:C9sCfocWcRsM4NOaBx4BqiwIpHvdRcze@dpg-cn789i6n7f5s73dahv70-a.oregon-postgres.render.com/testdb_tnct')
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 # First, make sure you have installed the necessary MySQL adapter for Django.
 # You can install it using pip:
@@ -136,7 +142,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'account.User'
-MEDIA_URL = ''
+MEDIA_URL = 'media/'
 MEDIA_ROOT = ''
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
