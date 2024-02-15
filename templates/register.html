@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="text-center mb-4">User Registration page</h1>
+                    <span class="mb-2 text-muted">
+                        {% if msg %}
+                            {{ msg | safe }}
+                        {% else %}
+                            Login page
+                        {% endif %}
+                    </span>
+                    <form method="post", enctype="multipart/form-data" id="registrationForm">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="first_name">First Name</label>
+                            {{ form.first_name }}
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name</label>
+                            {{ form.last_name }}
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            {{ form.username }}
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            {{ form.email }}
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            {{ form.password1 }}
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Confirm Password</label>
+                            {{ form.password2 }}
+                            <span id="passwordMatch" class="text-muted"></span>
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="is_patient" name="is_patient">
+                            <label class="form-check-label" for="is_patient">Patient</label>
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="is_doctor" name="is_doctor">
+                            <label class="form-check-label" for="is_doctor">Doctor</label>
+                        </div>
+                        <!-- New fields -->
+                        <div class="form-group">
+                            <label for="profile_picture">Profile Picture</label>
+                            <input type="file" class="form-control-file" id="profile_picture" name="profile_picture">
+                            <img id="preview" src="#" alt="Preview" style="display: none; max-width: 100px; max-height: 100px;">
+                        </div>
+                        <div class="form-group">
+                            <label for="address_line1">Address Line 1</label>
+                            <input type="text" class="form-control" id="address_line1" name="address_line1">
+                        </div>
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" class="form-control" id="city" name="city">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <input type="text" class="form-control" id="state" name="state">
+                        </div>
+                        <div class="form-group">
+                            <label for="pincode">Pincode</label>
+                            <input type="text" class="form-control" id="pincode" name="pincode">
+                        </div>
+                        <!-- End of new fields -->
+                        <span class="text-danger">{{ form.errors }}</span>
+                        <button type="submit" class="btn btn-primary btn-block">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS (Optional, not required for form functionality) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $('#registrationForm input[name="password2"]').keyup(function(){
+            var password1 = $('#registrationForm input[name="password1"]').val();
+            var password2 = $(this).val();
+            if(password1 == password2){
+                $('#passwordMatch').text('Passwords match').css('color', 'green');
+            } else {
+                $('#passwordMatch').text('Passwords do not match').css('color', 'red');
+            }
+        });
+    });
+    $(document).ready(function(){
+        // Show image preview
+        $('#profile_picture').change(function(){
+            readURL(this);
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#preview').attr('src', e.target.result).show();
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

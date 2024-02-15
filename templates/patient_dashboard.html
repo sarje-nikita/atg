@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #f8f9fa; /* Light gray background */
+            font-family: Arial, sans-serif;
+        }
+        .card {
+            border: none; /* Remove default card border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+        }
+
+        .card-body {
+            padding: 40px;
+        }
+        .profile-picture {
+            margin-bottom: 50px;
+            border-radius: 50%; /* Circular profile picture */
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+        /* Center the profile horizontally */
+        .profile-container {
+            display: flex;
+            justify-content: center;
+        }
+        .profile-details {
+            max-width: 400px; /* Limit width for better readability */
+            margin-bottom: 500px;
+        }
+        .profile-details p {
+            margin-bottom: 0; /* Remove default margin for paragraphs */
+        }
+        .profile-details .form-group {
+            display: flex;
+            align-items: center;
+        }
+        .profile-details label {
+            width: 120px; /* Fixed width for labels */
+            margin-right: 20px; /* Add some space between label and value */
+            text-align: right; /* Align labels to the right */
+        }
+        /* Style for main content */
+        .content-section {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        .content-section h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .card-text {
+            color: #666;
+        }
+        /* Background colors for content sections */
+        .category3 { background-color: #f7f7f7; }
+        .category2 { background-color: #e9f5fb; }
+        .category1 { background-color: #f3f0f5; }
+        /* Add more classes for additional categories as needed */
+
+        .card-img-top {
+            padding: 10px; /* Add padding around the image */
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light card">
+        <div class="container">
+            <a class="navbar-brand" href="#">HealthBeat</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'account:home'%}">
+                            <i class="fas fa-home"></i>&nbsp; Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account:logout_view'%}">
+                            <i class="fas fa-sign-out-alt"></i>&nbsp; Sign Out <!-- Font Awesome logout icon -->
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<div class="container">
+    <div class="row mt-5">
+        <!-- Sidebar with User Profile Info -->
+        <div class="col-md-4 sticky-top">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="text-center mb-4">User Profile</h2>
+                    <div class="profile-container">
+                        {% if user.profile_picture %}
+                        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+                        {% endif %}
+                    </div>
+                    <div class="profile-details">
+                        <div class="form-group">
+                            <label for="first_name">Name:</label>
+                            <p>{{ user.first_name }} {{ user.last_name }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username:</label>
+                            <p>{{ user.username }}</p>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <p>{{ user.email }}</p>
+                        </div>
+                        {% if user.is_doctor %}
+                        <div class="form-group">
+                            <label for="role">Role:</label>
+                            <p>Doctor</p>
+                        </div>
+                        {% elif user.is_patient %}
+                        <div class="form-group">
+                            <label for="role">Role:</label>
+                            <p>Patient</p>
+                        </div>
+                        {% endif %}
+                        <!-- Additional user details -->
+                        <div class="form-group">
+                            <label for="address_line1">Address:</label>
+                            <p>{{ user.address_line1 }}, {{ user.city }}, {{ user.state }}, {{ user.pincode }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Main Content -->
+        <div class="col-md-8">
+            <!-- Content Sections -->
+            {% for category, posts in categorized_posts.items %}
+            <div class="content-section category{{ forloop.counter }}">
+                <h2>{{ category }}</h2>
+                <div class="row">
+                    {% for post in posts %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card">
+                        <a href="{% url 'blog:blog_detail' post.id %}"> <!-- Link to the detailed view -->
+
+                            <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+                        </a>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ post.title }}</h5>
+                                <p class="card-text">{{ post.summary|truncatewords:15 }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container text-center">
+        <span class="text-muted">© 2024 HealthBeat. All rights reserved.</span>
+    </div>
+</footer>
+
+<!-- Bootstrap JS (Optional, not required for form functionality) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

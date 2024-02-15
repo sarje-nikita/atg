@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple User Login</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="content">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="text-center mb-4">Login page</h1>
+                        <span class="mb-2 text-muted">
+                            {% if msg %}
+                                {{ msg | safe }}
+                            {% else %}
+                                Login page
+                            {% endif %}
+                        </span>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                {{ form.username }}
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                {{ form.password }}
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="rememberMe" checked>
+                                <label class="form-check-label" for="rememberMe">Remember me</label>
+                            </div>
+                            <div class="form-group mt-3">
+                                <a href="#" class="forgot-pass">Forgot Password</a>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Log In</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS (Optional, not required for form functionality) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

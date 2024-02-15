@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Blog Post</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #f8f9fa; /* Light gray background */
+            font-family: Arial, sans-serif;
+            padding-top: 20px; /* Add padding to the top */
+        }
+        .container {
+            max-width: 800px; /* Limit width for better readability */
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .image-preview {
+            margin-bottom: 20px;
+        }
+        .image-preview img {
+            max-width: 100%;
+            max-height: 200px; /* Adjust the maximum height as needed */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .card {
+            border: none; /* Remove default card border */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light card">
+        <div class="container">
+            <a class="navbar-brand" href="#">HealthBeat</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'account:home'%}">
+                            <i class="fas fa-home"></i>&nbsp; Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account:logout_view'%}">
+                            <i class="fas fa-sign-out-alt"></i>&nbsp; Sign Out <!-- Font Awesome logout icon -->
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h1>Create Blog Post</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_title">Title:</label>
+                {{ form.title }}
+            </div>
+            <div class="form-group">
+                <label for="id_image">Image:</label>
+                {{ form.image }}
+                <div class="image-preview" id="image-preview"></div>
+            </div>
+            <div class="form-group">
+                <label for="id_category">Category:</label>
+                {{ form.category }}
+            </div>
+            <div class="form-group">
+                <label for="id_summary">Summary:</label>
+                {{ form.summary }}
+            </div>
+            <div class="form-group">
+                <label for="id_content">Content:</label>
+                {{ form.content }}
+            </div>
+            <div class="form-group form-check">
+                {{ form.draft }}
+                <label class="form-check-label" for="id_draft">Draft</label>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+<footer class="footer mt-auto py-3 bg-light">
+        <div class="container text-center">
+            <span class="text-muted">© 2024 HealthBeat. All rights reserved.</span>
+        </div>
+    </footer>
+    <!-- Bootstrap JS (Optional, not required for form functionality) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Function to display image preview
+        function previewImage(input) {
+            var preview = document.getElementById('image-preview');
+            preview.innerHTML = ''; // Clear previous preview
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    var image = document.createElement('img');
+                    image.src = e.target.result;
+                    preview.appendChild(image);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Attach event listener to image input
+        var imageInput = document.querySelector('input[type="file"]');
+        imageInput.addEventListener('change', function() {
+            previewImage(this);
+        });
+    </script>
+</body>
+</html>
