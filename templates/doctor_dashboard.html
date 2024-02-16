@@ -245,6 +245,14 @@
                                         </button>
                                     </form>
                                     {% endif %}
+
+                                    <form style="margin-top: 10px;" action="{% url 'blog:delete_blog' post.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this blog post?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-block" >
+                                            <i class="fas fa-trash"></i> &nbsp; Delete <!-- Font Awesome trash icon -->
+                                        </button>
+                                    </form>
+
                                 </div>
                             </div>
                         </div>

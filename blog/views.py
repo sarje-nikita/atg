@@ -1,5 +1,6 @@
 # blog/views.py
-from django.shortcuts import render, redirect
+from django.http import HttpResponseForbidden
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Blog
 from .forms import BlogForm
@@ -35,3 +36,16 @@ def blog_detail(request, blog_id):
 #     # Filter blog posts by the currently logged-in doctor's ID
 #     doctor_posts = Blog.objects.filter(author=request.user)
 #     return render(request, 'blog/doctor_posts.html', {'doctor_posts': doctor_posts})
+@login_required
+def delete_blog(request, blog_id):
+    # Retrieve the blog post
+    blog = get_object_or_404(Blog, id=blog_id)
+
+    # Check if the user is the author of the blog post
+    if request.user == blog.author:
+        # Delete the blog post
+        blog.delete()
+        return redirect('account:doctor')
+    else:
+        # If the user is not the author, you can return a forbidden response or handle it as needed
+        return HttpResponseForbidden("You are not allowed to delete this blog post.")
