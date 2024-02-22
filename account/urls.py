@@ -14,5 +14,6 @@ urlpatterns = [
     path('home', views.home, name='home'),
     path('publish/<int:blog_id>', views.publish_draft, name='publish_draft'),
     path('blog_data/', views.blog_data, name='blog_data'),
+    path('toggle_google_calendar', views.toggle_google_calendar, name='toggle_google_calendar'),
 
 ]

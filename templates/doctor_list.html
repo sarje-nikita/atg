@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor List</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Custom styles */
+        body {
+            background-color: #f8f9fa;
+            /* Light gray background */
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .card {
+            border: none;
+            /* Remove default card border */
+            border-radius: 10px;
+            /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            /* Add shadow */
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .profile-picture {
+            margin-bottom: 10px;
+            border-radius: 50%;
+            /* Circular profile picture */
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Center the profile horizontally */
+        .profile-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .book-appointment-btn {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .book-appointment-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .book-appointment-btn:hover::before {
+            opacity: 1;
+        }
+
+        .book-appointment-btn:hover i {
+            transform: translateX(0);
+        }
+
+        .book-appointment-btn i {
+            position: absolute;
+            top: 50%;
+            left: -20px;
+            transform: translateY(-50%) translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 2;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light card">
+        <div class="container">
+            <a class="navbar-brand" href="#">HealthBeat</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account:home'%}">
+                            <i class="fas fa-home"></i>&nbsp; Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'appointment:list_view'%}">
+                            <i class="far fa-calendar-plus"></i>&nbsp; Book Appointment <!-- Font Awesome logout icon -->
+                            <span class="sr-only">(current)</span>
+
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'account:logout_view'%}">
+                            <i class="fas fa-sign-out-alt"></i>&nbsp; Sign Out <!-- Font Awesome logout icon -->
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5">
+        <h2 class="mb-4">List of Doctors</h2>
+        <div class="row">
+            {% for u in users %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <div class="profile-container">
+                            <img src="{{ u.profile_picture.url }}" alt="Doctor Profile Picture" class="profile-picture">
+                        </div>
+                        <h5 class="card-title">Dr.{{ u.first_name }} {{ u.last_name }}</h5>
+                        <!-- Pass the doctor_id as a data attribute -->
+                        <button class="btn btn-primary book-appointment-btn" data-doctor-id="{{ u.id }}"><i class="fas fa-calendar-plus"></i> Book Appointment</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS (Optional, not required for form functionality) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.book-appointment-btn').click(function() {
+                var doctorId = $(this).data('doctor-id');
+                window.location.href = '/appointment/book-appointment/?doctor_id=' + doctorId;
+            });
+        });
+    </script>
+</body>
+
+</html>

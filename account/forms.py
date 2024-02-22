@@ -72,7 +72,9 @@ class SignUpForm(UserCreationForm):
     city = forms.CharField(max_length=100, required=False)
     state = forms.CharField(max_length=100, required=False)
     pincode = forms.CharField(max_length=10, required=False)
+    connect_google_calendar = forms.BooleanField(required=False)
+
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'is_doctor', 'is_patient', 'profile_picture', 'address_line1', 'city', 'state', 'pincode')
+        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2', 'is_doctor', 'is_patient', 'profile_picture', 'address_line1', 'city', 'state', 'pincode','connect_google_calendar')

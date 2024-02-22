@@ -8,16 +8,21 @@ from .forms import BlogForm
 
 @login_required()
 def create_blog(request):
-    if request.method == 'POST':
-        form = BlogForm(request.POST, request.FILES)
-        if form.is_valid():
-            blog = form.save(commit=False)
-            blog.author = request.user
-            blog.save()
-            return redirect('blog:blog_detail', blog_id=blog.id)
+    if request.user.is_doctor:
+        if request.method == 'POST':
+            form = BlogForm(request.POST, request.FILES)
+            if form.is_valid():
+                blog = form.save(commit=False)
+                blog.author = request.user
+                blog.save()
+                return redirect('blog:blog_detail', blog_id=blog.id)
+        else:
+            form = BlogForm()
+        return render(request, 'blog/create_blog.html', {'form': form})
     else:
-        form = BlogForm()
-    return render(request, 'blog/create_blog.html', {'form': form})
+        return HttpResponseForbidden("Only doctors can create a blog")
+
+
 
 @login_required()
 def blog_detail(request, blog_id):

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Confirmation</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            /* Light gray background */
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .confirmation-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f1f8e9; /* Light green background */
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .confirmation-heading {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .confirmation-details {
+            margin-bottom: 20px;
+        }
+
+        .confirmation-details p {
+            margin-bottom: 5px;
+        }
+
+        .icon {
+            color: #4caf50; /* Green color */
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <h1 class="confirmation-heading"><i class="fas fa-check-circle icon"></i>Appointment Confirmation</h1>
+        <div class="confirmation-details">
+            <p><i class="fas fa-user-md icon"></i>Doctor's Name: Dr. {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}</p>
+            <p><i class="far fa-calendar-alt icon"></i>Appointment Date: {{ appointment.date }}</p>
+            <p><i class="far fa-clock icon"></i>Start Time: {{ appointment.start_time }}</p>
+            <p><i class="far fa-clock icon"></i>End Time: {{ end_time }}</p>
+        </div>
+    </div>
+    <!-- Bootstrap JS (Optional, not required for styling) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Font Awesome JS (Optional, not required for styling) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+</body>
+</html>

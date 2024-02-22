@@ -12,3 +12,4 @@ class User(AbstractUser):
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=100)
     pincode = models.CharField(max_length=10)
+    google_calendar_credentials_path = models.CharField(max_length=300, default='')  # Field to store Google Calendar credentials

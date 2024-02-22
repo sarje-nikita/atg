@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account.apps.AccountConfig',
     'blog',
+    'appointment',
 ]
 
 MIDDLEWARE = [
@@ -97,7 +98,7 @@ DATABASES = {
 #         'ENGINE': 'django.db.backends.mysql',
 #         'NAME': 'agt',  # Change this to your database name
 #         'USER': 'root',  # Change this to your MySQL username
-#         'PASSWORD': 'Aniket@9277',  # Change this to your MySQL password
+#         'PASSWORD': 'Nikita@9277',  # Change this to your MySQL password
 #         'HOST': 'localhost',  # Change this if your MySQL server is running on a different host
 #         'PORT': '3306',  # Change this if your MySQL server is running on a different port
 #     }
@@ -145,4 +146,7 @@ AUTH_USER_MODEL = 'account.User'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = ''
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+GOOGLE_API_CREDENTIALS_FILE = os.path.join(BASE_DIR, 'credentials', 'google_calendar_credentials.json')
+
+
 

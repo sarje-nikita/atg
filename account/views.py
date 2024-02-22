@@ -1,14 +1,44 @@
-from django.contrib.auth.decorators import login_required
+import os
+import pickle
+
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from google_auth_oauthlib.flow import Flow, InstalledAppFlow
+
 from .forms import SignUpForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
 from blog.models import Blog
 from django.http import JsonResponse
 
 
+@login_required
+def toggle_google_calendar(request):
+    if request.method == 'POST':
+        user = request.user
+        if user.google_calendar_credentials_path != '':
+            # Disconnect Google Calendar
+            os.remove(user.google_calendar_credentials_path)
+            user.google_calendar_credentials_path = ''
+            user.save()
+            return JsonResponse({'status': 'disconnected', 'google_calendar_credentials_path': ''})
+        else:
+            # Connect to Google Calendar
+            SCOPES = ['https://www.googleapis.com/auth/calendar']
+            flow = InstalledAppFlow.from_client_secrets_file(settings.GOOGLE_API_CREDENTIALS_FILE, SCOPES)
+            credentials = flow.run_local_server(port=3000)
+            # Save credentials to a pickle file in a secure location
+            credentials_path = os.path.join(settings.STATIC_ROOT, f"{user.username}_google_calendar_credentials.pkl")
+            with open(credentials_path, 'wb') as token:
+                pickle.dump(credentials, token)
+            # Update credentials path in the user model
+            user.google_calendar_credentials_path = credentials_path
+            user.save()
+            return JsonResponse({'status': 'connected', 'google_calendar_credentials_path': credentials_path})
+    return JsonResponse({'status': 'error'})
 
-# Create your views here.
+
+
 
 
 def index(request):
@@ -68,21 +98,6 @@ def patient(request):
         return redirect('/')
 
 
-
-
-
-
-# @login_required
-# def doctor(request):
-#     if request.user.is_doctor:
-#         return render(request, 'doctor_dashboard.html', {'user': request.user})
-#     else:
-#         return redirect('/')
-#
-
-# views.py
-
-
 def doctor(request):
     # Retrieve the doctor's blog posts
     categorized_posts = {}
@@ -94,11 +109,6 @@ def doctor(request):
             categorized_posts[post.category] = [post]
     return render(request, 'doctor_dashboard.html', {'doctor_posts': categorized_posts, 'user': request.user})
 
-# @login_required
-# def doctor_blog_list(request):
-#     # Retrieve blog posts for the current doctor
-#     blogs = Blog.objects.filter(author=request.user)
-#     return render(request, 'blog/doctor_blog_list.html', {'blogs': blogs})
 
 @login_required
 def publish_draft(request, blog_id):
@@ -113,12 +123,14 @@ def logout_view(request):
     logout(request)
     return redirect('account:index')
 
+
 @login_required
 def home(request):
     if request.user.is_doctor:
         return redirect('account:doctor')
     else:
         return redirect('account:patient')
+
 
 @login_required
 def blog_data(request):
